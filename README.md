@@ -41,9 +41,13 @@ commented out) / `CHANGE n: AFTER (modified)`.
 |---|---|---|
 | 0 | module renamed `FloeModuleExt` | so the original and the extended copy can be loaded together |
 | 1–3 | ice–ocean drag, wind drag on floes and wind stress on open water use the **vector** quadratic law of Eq. 2, τ = ρC\|Δ**u**\|Δ**u** | the published module computes drag component-wise (τx = ρCΔu\|Δu\|, τy = ρCΔv\|Δv\|), which underestimates drag for motion oblique to the grid axes (by up to ~29% at 45°) and makes results depend on grid orientation |
-| 4 | collision chord-length fallback uses the floe radii `f.r1`, `f.r2` | the original refers to undefined variables `r1`, `r2` and stops with an error when this branch is reached |
-| 5 | collision force and torque are **added** to the ocean/wind forces (`+=`) | the original replaces them (`=`), so a colliding floe loses its drag and wind forcing |
+| 4 | collision chord-length fallback uses the floe radii `f.r1`, `f.r2` | the original refers to undefined variables `r1`, `r2`, so a run stops with an error when this branch is reached (when one floe overlaps so far that it lies entirely inside the other, where the chord-length formula has no real solution; in practice only after a numerical blow-up) |
+| 5 | in `collideTwoFloes!`, the collision force and torque are **added** to the floe's force and torque (`+=`) | the original assigns them (`=`), overwriting the ocean and wind drag already stored for that floe in the same time step; a colliding floe therefore feels only the collision, and when it touches several floes at once only the last collision counts. Wall collisions in the same module already use `+=` |
 | 6 | optional **velocity-dependent ice–ocean heat transfer** (`heat_mode = :dynamic`) | see below; `heat_mode = :constant` keeps the paper's fixed q_IO |
+
+Changes 4 and 5 only matter when floes collide. None of the experiments below involve
+floe–floe collisions (single floes, or floes far apart), so their results are not affected;
+the fixes are there for runs with packed, interacting floes.
 
 **Velocity-dependent heat transfer (CHANGE 6).** In each grid cell under a floe,
 
