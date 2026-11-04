@@ -5,7 +5,13 @@ of Gupta & Thompson (2022), run with a prescribed (non-evolving) ocean and atmos
 The main experiment tests **velocity-dependent ice–ocean heat transfer** for floes
 carried by an ocean eddy.
 
-Author: Jayasankar T. Pillai
+**Author details:** Claude wrote it. Jayasankar T. Pillai kept asking “but why?” until it was right.
+
+*Division of labour:* Jayasankar chose the questions, designed and steered the
+experiments, asked the awkward physics questions, spotted the results that didn't add
+up, and takes responsibility for everything here. Claude, an AI assistant (Anthropic),
+wrote the code, did the arithmetic, talked through the physics at every "but why?",
+and was occasionally talked out of a bad idea.
 
 ## Credit
 
@@ -23,8 +29,6 @@ used in
 `src/FloeModuleExt.jl` is an extended copy of it (changes listed below and marked
 in the code). Everything else (driver, run scripts, plotting) is new.
 
-The code in this repository was developed with the assistance of Claude, an AI
-assistant (Anthropic).
 
 ## What is added
 
