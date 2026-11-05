@@ -252,6 +252,33 @@ Runs:
 - `paper_4floes_R1km_nowind.nc`: 4 floe(s), radius 1 km, h0 = 1.5 m; no wind; ocean at rest; Coriolis on; melting on (ocean -1 degC); 32 km box, 128x128 grid; model extended; 80 days, dt = 120 s
 - `paper_4floes_R1km_wind7.nc`: 4 floe(s), radius 1 km, h0 = 1.5 m; oscillating wind, peak 7 m/s towards 45 deg, period 20 days; Ekman surface current (paper Eq. 4); Coriolis on; melting on (ocean -1 degC); 32 km box, 128x128 grid; model extended; 80 days, dt = 30 s
 
+## tiltcheck.png
+
+**Tilt / drag check: floe tracks and distance from the eddy centre**  
+_created 2026-11-04 19:52_
+
+Anticyclonic eddy (radius 4 km, 0.08 m/s; background: vorticity ζ/f, blue = anticyclonic), one 2 km floe, melting off, 5 days. Left: calm, floe starting 4 km from the eddy centre. Right: steady 3 m/s wind towards +x, floe starting at the centre. Red: original module (component-wise drag), no tilt. Blue: vector drag (Eq. 2), no tilt. Green: vector drag + sea-surface tilt (gradient-wind balance). Top: tracks (circles: floe at the end). Bottom: distance of the floe centre from the eddy centre; decreasing = drawn in (retained), increasing = escaping.
+
+Runs:
+- `tiltcheck_calm_off4km_origdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; no wind; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 32 km box, 128x128 grid; model original; 5 days, dt = 30 s
+- `tiltcheck_calm_off4km_vecdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; no wind; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 32 km box, 128x128 grid; model extended; 5 days, dt = 30 s
+- `tiltcheck_calm_off4km_vecdrag_tilt.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; no wind; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 32 km box, 128x128 grid; model extended; 5 days, dt = 30 s
+- `tiltcheck_wind3_origdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model original; 5 days, dt = 30 s
+- `tiltcheck_wind3_vecdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model extended; 5 days, dt = 30 s
+- `tiltcheck_wind3_vecdrag_tilt.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model extended; 5 days, dt = 30 s
+
+## tiltcheck_wind3_15d.png
+
+**Tilt / drag check, 3 m/s wind, 15 days**  
+_created 2026-11-04 19:52_
+
+As tiltcheck.png (right column), run for 15 days with snapshots every 6 h: anticyclonic eddy (radius 4 km, 0.08 m/s), one 2 km floe starting at the centre, steady 3 m/s wind towards +x, melting off. Red: original drag, no tilt. Blue: vector drag, no tilt. Green: vector drag + sea-surface tilt. Top: tracks (circles: floe at the end). Bottom: distance of the floe centre from the eddy centre; tests whether the floe eventually leaves the eddy.
+
+Runs:
+- `tiltcheck_wind3_15d_origdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model original; 15 days, dt = 30 s
+- `tiltcheck_wind3_15d_vecdrag.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model extended; 15 days, dt = 30 s
+- `tiltcheck_wind3_15d_vecdrag_tilt.nc`: 1 floe(s), radius 2 km, h0 = 1.5 m; constant wind 3 m/s towards 0 deg; anticyclonic eddy (R = 4 km, V = 0.08 m/s); Coriolis on; no melting; 96 km box, 384x384 grid; model extended; 15 days, dt = 30 s
+
 ## windeddy_du_q.png
 
 **Ice-ocean speed difference and heat transfer coefficient vs time (wind runs)**  

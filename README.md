@@ -85,6 +85,8 @@ scripts/run_paper_setup.jl                 paper parameters: melting check, osci
 scripts/run_eddy_test.jl                   floe at the centre of an eddy: does it stay there?
 scripts/run_calm_heat_experiments_with_eddy.jl   12 runs: heat transfer, calm (5 days)
 scripts/run_wind_heat_experiments_with_eddy.jl   16 runs: heat transfer, 3 and 7 m/s wind (5 days)
+scripts/run_tilt_check_with_eddy.jl              6 runs: drag formulation and tilt, calm and 3 m/s
+scripts/run_tilt_check_long_with_eddy.jl         3 runs: the 3 m/s tilt check over 15 days
 plotting/plot_*.py                         one plotting script per experiment set (+ plot_run.py, generic)
 plotting/figindex.py                       writes the figure catalogue figures/FIGURES.md
 figures/                                   figures and their catalogue
@@ -188,12 +190,42 @@ relative to the paper's constant q (2.77 cm/day):
   the constant-q rate) to ~1.8× faster (7 m/s) than with the constant q.
 - At 3 m/s the eddy (peak speed 0.08 m/s) holds floes up to its own size against the
   wind (wind-driven drift ≈ 0.05 m/s); the floe twice the eddy's size escapes. This
-  retention is obtained without the sea-surface tilt term (see Limitations).
+  retention is obtained without the sea-surface tilt term; experiment 5 shows that it
+  persists with tilt and that the melt changes by only ~6%.
 
 Figures: `windeddy_melt_ratio.png` (summary: calm, 3 and 7 m/s), `calmeddy_thinning.png`,
 `calmeddy_cummelt.png`, `calmeddy_cummelt_pattern.png`, `calmeddy_du_q.png`,
 `windeddy_thinning.png`, `windeddy_du_q.png`, `windeddy_tracks.png`.
 Calm runs: 32 km box, 5 days. Wind runs: steady wind towards +x, 96 km box, 5 days.
+
+### 5. Drag formulation and sea-surface tilt: does the floe stay in the eddy?
+(`run_tilt_check_with_eddy.jl`, `run_tilt_check_long_with_eddy.jl`)
+
+Without a sea-surface tilt term (as in the paper and the experiments above), Coriolis on a
+floe circling an anticyclone is not balanced and pushes it inwards. The tilt term adds the
+pressure-gradient force of the eddy's sloping surface, −g∇η = f k̂ × **u**ₒ + (**u**ₒ·∇)**u**ₒ
+(gradient-wind balance; g gravity, η sea-surface height, **u**ₒ ocean velocity), so a floe
+moving with the water feels the same force balance as the water. One 2 km floe in the
+anticyclonic eddy, melting off, three versions: original module (component-wise drag),
+vector drag, vector drag + tilt.
+
+| Set-up | No tilt (either drag) | With tilt |
+|---|---|---|
+| calm, floe starting 4 km from the centre (5 days) | spirals into the centre within ~2 days | circles the eddy at ≈4.2 km (its starting radius) |
+| 3 m/s wind, floe starting at the centre (15 days) | parks ≈1.9 km from the centre, where the eddy current (≈5.6 cm/s) opposes the wind-driven drift (≈5 cm/s) | orbits that same point on a loop between ≈0.3 and ≈4.2 km from the centre (period ≈3.7 days); still in the eddy after 15 days, peak distance growing slowly (3.95 → 4.17 km) |
+| 3 m/s wind: mean slip, days 2–15 | 4.97 (original drag), 4.94 cm/s (vector drag) | 4.55 cm/s |
+
+- The **drag formulation hardly matters** for retention: original and vector drag give
+  nearly identical tracks.
+- In **calm** conditions the inward drift of a floe in an anticyclone is an **artefact of
+  the missing tilt term**: with tilt, the floe stays at whatever radius it starts.
+  (Floes starting at the eddy centre, as in the calm heat experiments, are unaffected.)
+- At **3 m/s** the floe remains in the eddy with tilt, but orbits instead of parking. The
+  slip is ~8% lower, which lowers the dynamic heat transfer by the same fraction and the
+  melt ratio from ≈0.93 to ≈0.87 (u\*_min not reached). The heat-transfer conclusions of
+  experiment 4 are therefore robust to the tilt term at the ~6% level.
+
+Figures: `tiltcheck.png` (5 days, calm and 3 m/s), `tiltcheck_wind3_15d.png` (3 m/s, 15 days).
 
 ## Limitations
 
@@ -204,17 +236,18 @@ Calm runs: 32 km box, 5 days. Wind runs: steady wind towards +x, 96 km box, 5 da
 - **Single thickness per floe.** Per-cell melt is summed into one floe thickness, so
   ring-shaped heat delivery cannot produce thinner rims.
 - **Constant freezing temperature** (−1.8 °C); salinity is not used.
-- **No sea-surface tilt** in the main experiments (as in the paper). Without it,
-  Coriolis on a floe circling an eddy is unbalanced, which favours retention in
-  anticyclones; this may contribute to the trapping seen at 3 m/s.
+- **No sea-surface tilt** in the heat experiments (as in the paper). Without it, Coriolis
+  on a floe circling an eddy is unbalanced and draws floes into anticyclones. Experiment 5
+  shows this matters for off-centre floes in calm conditions, but changes the 3 m/s melt
+  by only ~6%. Tilt was tested for one floe size and an anticyclone only.
 - **Periodic boundaries.** The module keeps one periodic copy per floe, so a floe
   overlapping a box corner is only partly represented. Floes here are kept away from
   the corners.
 
 ## Next steps
 
-- Sea-surface tilt: compare floe retention in an eddy with and without the tilt term
-  (calm, off-centre floe; and 3 m/s wind).
+- Sea-surface tilt in the heat experiments themselves (all floe sizes, cyclonic eddies,
+  longer runs to see whether the orbiting floe eventually escapes).
 - Floes with radially varying thickness, to test whether rim-concentrated heat
   delivery thins floe edges.
 - Coupling to an evolving ocean (Oceananigans.jl) to include meltwater stratification
